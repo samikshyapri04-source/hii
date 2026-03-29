@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A little surprise for you</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #d8c3a5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Dancing Script', cursive;
+    overflow: hidden;
+}
+
+/* Envelope container */
+.container {
+    position: relative;
+    transition: transform 0.5s ease;
+}
+
+/* Move envelope down */
+.container.open {
+    transform: translateY(120px);
+}
+
+/* Envelope */
+.envelope-wrapper {
+    width: 320px;
+    height: 220px;
+    background: #8b0000;
+    border-radius: 6px;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Flap */
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 160px solid transparent;
+    border-right: 160px solid transparent;
+    border-top: 110px solid #a52a2a;
+    transform-origin: top;
+    transition: transform 0.6s ease;
+    z-index: 2;
+}
+
+.open .flap {
+    transform: rotateX(180deg);
+}
+
+/* Letter (centered popup) */
+.letter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+
+    width: 320px;
+    max-height: 75vh;
+
+    background: #fdf6e3;
+    padding: 20px;
+    border-radius: 8px;
+
+    opacity: 0;
+    transition: all 0.5s ease;
+
+    overflow-y: auto;
+    z-index: 10;
+}
+
+/* Hide scrollbar */
+.letter::-webkit-scrollbar {
+    display: none;
+}
+.letter {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Show letter */
+.letter.open {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Title */
+h1 {
+    font-family: 'Great Vibes', cursive;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #3e2723;
+}
+
+/* Text */
+.text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #3e2723;
+    white-space: pre-line;
+    text-align: center;
+}
+
+/* Signature */
+.signature {
+    text-align: right;
+    font-family: 'Great Vibes', cursive;
+    font-size: 22px;
+    margin-top: 20px;
+}
+
+/* Heart */
+.heart {
+    text-align: center;
+    font-size: 22px;
+    color: #8b0000;
+    animation: beat 1.2s infinite;
+    margin-top: 10px;
+}
+
+@keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="container" onclick="toggleEnvelope()">
+    <div class="envelope-wrapper" id="wrapper">
+        <div class="flap"></div>
+    </div>
+</div>
+
+<!-- Centered Letter -->
+<div class="letter" id="letter">
+    <h1></h1>
+
+    <div class="text" id="typedText"></div>
+
+    <div class="signature">
+        Yours,<br>Priya
+    </div>
+
+    <div class="heart">♥</div>
+</div>
+
+<script>
+const message = `My love,
+
+Hundered days of you being mine…
+Hundered days of you making me feel what I once thought only existed in tales.
+And yet, here you are real, mine, and more beautiful than anything.
+
+Happy 100 Days! `;
+
+let index = 0;
+let isTyping = false;
+
+const textElement = document.getElementById("typedText");
+const wrapper = document.getElementById("wrapper");
+const container = document.getElementById("container");
+const letter = document.getElementById("letter");
+
+function toggleEnvelope() {
+    if (wrapper.classList.contains("open")) {
+        wrapper.classList.remove("open");
+        container.classList.remove("open");
+        letter.classList.remove("open");
+
+        setTimeout(() => {
+            textElement.innerHTML = "";
+            index = 0;
+            isTyping = false;
+        }, 500);
+
+    } else {
+        wrapper.classList.add("open");
+        container.classList.add("open");
+
+        setTimeout(() => {
+            letter.classList.add("open");
+        }, 400);
+
+        if (!isTyping) {
+            isTyping = true;
+            setTimeout(typeWriter, 700);
+        }
+    }
+}
+
+function typeWriter() {
+    if (index < message.length && wrapper.classList.contains("open")) {
+        textElement.innerHTML += message.charAt(index);
+        index++;
+        setTimeout(typeWriter, 35);
+    }
+}
+</script>
+
+</body>
+</html>
